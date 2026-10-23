@@ -6,7 +6,7 @@ import { CircleLoading } from "../components/Loading";
 
 export default function Home() {
 
-  const {items , loading , setFilters , refetch ,clearFilters  } = useGetItems()
+  const {items , loading , setFilters ,clearFilters  } = useGetItems()
 
   const FilterQuery = (e , status , category , local , search)=>{
     e.preventDefault();
@@ -16,7 +16,6 @@ export default function Home() {
       local: local,
       busca: search,
     })
-    refetch()
   }
 
   return (

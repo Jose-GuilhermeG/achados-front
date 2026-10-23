@@ -4,13 +4,15 @@ import { getItemById } from "@services/itemServices";
 import { useNavigate } from "react-router-dom";
 
 export function useGetItemById(id) {
+  const [itemId , setItemId] = useState(id);
   const [item, setItem] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate()
 
   const { reportError } = useError();
 
-  const fetchItems = useCallback(async (id) => {
+  useEffect(() => {
+    const fetchItems = async (id) => {
     setLoading(true);
     try {
       const data = await getItemById(id);
@@ -25,15 +27,13 @@ export function useGetItemById(id) {
     } finally {
       setLoading(false);
     }
-  }, [reportError]);
-
-  useEffect(() => {
-    fetchItems(id);
-  }, [id,fetchItems]);
+  };
+    fetchItems(itemId);
+  }, [id,reportError , navigate]);
 
   return {
     item,
     loading,
-    refetch: () => fetchItems(id),
+    refetch: () => setItemId(id),
   };
 }

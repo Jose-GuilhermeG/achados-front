@@ -47,6 +47,7 @@ const handleDeleteConfirm = async () => {
         await deliverItem(item.id,{devolvido_para: deliveredName});
         setIsDeliverModalOpen(false);
         refetch()
+        navigate("")
   } catch (error) {
   }
 };

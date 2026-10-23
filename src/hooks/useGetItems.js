@@ -14,22 +14,22 @@ export function useGetItems(initialFilters = {}) {
 
   const { reportError } = useError();
 
-  const fetchItems = useCallback(async (currentFilters) => {
-    setLoading(true);
-    try {
-      const data = await getItems(currentFilters);
-      setItems(data);
-    } catch (error) {
-      console.error("Erro ao carregar itens:", error);
-      reportError("Não foi possível carregar a listagem de itens do servidor. Tente novamente mais tarde.");
-    } finally {
-      setLoading(false);
-    }
-  }, [reportError]);
-
   useEffect(() => {
-    fetchItems(filters);
-  }, [filters, fetchItems]);
+      const fetchItems = async (currentFilters) => {
+        setLoading(true);
+        try {
+          const data = await getItems(currentFilters);
+          console.log(currentFilters)
+          setItems(data);
+        } catch (error) {
+          console.error("Erro ao carregar itens:", error);
+          reportError("Não foi possível carregar a listagem de itens do servidor. Tente novamente mais tarde.");
+        } finally {
+          setLoading(false);
+        }
+      };
+    fetchItems(filters)
+  }, [filters , reportError]);
 
   const updateFilters = (newFilters) => {
     setFilters((prev) => ({ ...prev, ...newFilters }));
@@ -50,6 +50,11 @@ export function useGetItems(initialFilters = {}) {
     filters,
     setFilters: updateFilters,
     clearFilters,
-    refetch: () => fetchItems(filters),
+    refetch: () => setFilters({
+    status: initialFilters.status || "",
+    categoria: initialFilters.categoria || "",
+    local: initialFilters.local || "",
+    busca: initialFilters.busca || "",
+  }),
   };
 }

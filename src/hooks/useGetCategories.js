@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { getCategories } from "@services/itemServices";
 import useError from "@hooks/useError";
 
@@ -7,22 +7,22 @@ export function useGetCategories() {
   const [loading, setLoading] = useState(true);
   const { reportError } = useError();
 
-  const fetchCategories = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = await getCategories();
-      setCategories(data);
-    } catch (error) {
-      console.error("Erro ao buscar categorias:", error);
-      reportError("Não foi possível carregar as categorias do sistema.");
-    } finally {
-      setLoading(false);
-    }
+  
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setLoading(true);
+      try {
+        const data = await getCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error("Erro ao buscar categorias:", error);
+        reportError("Não foi possível carregar as categorias do sistema.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCategories();
   }, [reportError]);
 
-  useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
-
-  return { categories, loading, refetch: fetchCategories };
+  return { categories, loading };
 }

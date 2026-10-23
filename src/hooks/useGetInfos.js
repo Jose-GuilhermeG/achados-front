@@ -7,7 +7,7 @@ export function useGetInfos() {
   const [loading, setLoading] = useState(true);
   const { reportError } = useError();
 
-  const fetchInfos = useCallback(async () => {
+  const fetchInfos = async () => {
     setLoading(true);
     try {
       const data = await GetMyInfos();
@@ -18,13 +18,13 @@ export function useGetInfos() {
     } finally {
       setLoading(false);
     }
-  }, [reportError]);
+  };
 
   useEffect(() => {
     fetchInfos();
     setUser(null)
     setLoading(false)
-  }, [fetchInfos]);
+  }, []);
 
   return { user, loading, refetch: fetchInfos };
 }

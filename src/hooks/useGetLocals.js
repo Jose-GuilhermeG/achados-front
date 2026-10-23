@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { getLocals } from "@services/itemServices";
 import useError from "@hooks/useError";
 
@@ -7,7 +7,8 @@ export function useGetLocals() {
   const [loading, setLoading] = useState(true);
   const { reportError } = useError();
 
-  const fetchLocals = useCallback(async () => {
+  useEffect(() => {
+    const fetchLocals = async () => {
     setLoading(true);
     try {
       const data = await getLocals();
@@ -18,11 +19,9 @@ export function useGetLocals() {
     } finally {
       setLoading(false);
     }
-  }, [reportError]);
-
-  useEffect(() => {
+    };
     fetchLocals();
-  }, [fetchLocals]);
+  },[reportError]);
 
-  return { locals, loading, refetch: fetchLocals };
+  return { locals, loading };
 }
